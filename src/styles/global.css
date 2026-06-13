@@ -1,27 +1,61 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #171717;
-  --color-on-primary: #ffffff;
-  --color-ink: #171717;
-  --color-body: #4d4d4d;
-  --color-mute: #888888;
-  --color-hairline: #ebebeb;
-  --color-hairline-strong: #a1a1a1;
-  --color-canvas: #ffffff;
-  --color-canvas-soft: #fafafa;
-  --color-canvas-soft-2: #f5f5f5;
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-mute: var(--mute);
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+  --color-canvas: var(--canvas);
+  --color-canvas-soft: var(--canvas-soft);
+  --color-canvas-soft-2: var(--canvas-soft-2);
   --color-link: #0070f3;
   --color-success: #0070f3;
   --color-error: #ee0000;
-  --color-error-soft: #f7d4d6;
+  --color-error-soft: var(--error-soft);
   --color-error-deep: #c50000;
   --color-warning: #f5a623;
-  --color-warning-soft: #ffefcf;
+  --color-warning-soft: var(--warning-soft);
   --color-warning-deep: #ab570a;
+  --color-violet: #7928ca;
+  --color-violet-soft: var(--violet-soft);
 
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+}
+
+:root {
+  --primary: #171717;
+  --on-primary: #ffffff;
+  --ink: #171717;
+  --body: #4d4d4d;
+  --mute: #888888;
+  --hairline: #ebebeb;
+  --hairline-strong: #a1a1a1;
+  --canvas: #ffffff;
+  --canvas-soft: #fafafa;
+  --canvas-soft-2: #f5f5f5;
+  --error-soft: #f7d4d6;
+  --warning-soft: #ffefcf;
+  --violet-soft: #d8ccf1;
+}
+
+.dark {
+  --primary: #ffffff;
+  --on-primary: #0a0a0a;
+  --ink: #f5f5f5;
+  --body: #a1a1a1;
+  --mute: #666666;
+  --hairline: #222222;
+  --hairline-strong: #444444;
+  --canvas: #121212;
+  --canvas-soft: #0a0a0a;
+  --canvas-soft-2: #1a1a1a;
+  --error-soft: #2c1516;
+  --warning-soft: #2b1f11;
+  --violet-soft: #251633;
 }
 
 @layer base {
@@ -36,40 +70,83 @@
     height: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
 }
 
-/* Vercel Mesh Gradient decoration */
+/* Vercel Mesh Gradient decoration (adjusted opacities for light/dark) */
 .mesh-gradient {
   background-image: 
-    radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.15) 0px, transparent 0%),
-    radial-gradient(at 97% 21%, hsla(256, 98%, 72%, 0.15) 0px, transparent 50%),
-    radial-gradient(at 52% 99%, hsla(339, 98%, 79%, 0.15) 0px, transparent 50%),
-    radial-gradient(at 10% 29%, hsla(142, 98%, 82%, 0.15) 0px, transparent 50%),
-    radial-gradient(at 97% 96%, hsla(43, 98%, 74%, 0.15) 0px, transparent 50%),
-    radial-gradient(at 33% 50%, hsla(222, 98%, 57%, 0.15) 0px, transparent 50%),
-    radial-gradient(at 79% 53%, hsla(343, 98%, 52%, 0.15) 0px, transparent 50%);
+    radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 97% 21%, hsla(256, 98%, 72%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 52% 99%, hsla(339, 98%, 79%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, hsla(142, 98%, 82%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 97% 96%, hsla(43, 98%, 74%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 33% 50%, hsla(222, 98%, 57%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 79% 53%, hsla(343, 98%, 52%, 0.1) 0px, transparent 50%);
   filter: blur(80px);
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
-/* Premium stacked shadow transitions */
+.dark .mesh-gradient {
+  background-image: 
+    radial-gradient(at 27% 37%, hsla(215, 98%, 45%, 0.15) 0px, transparent 55%),
+    radial-gradient(at 97% 21%, hsla(256, 98%, 55%, 0.15) 0px, transparent 55%),
+    radial-gradient(at 52% 99%, hsla(339, 98%, 55%, 0.15) 0px, transparent 55%),
+    radial-gradient(at 10% 29%, hsla(142, 98%, 65%, 0.12) 0px, transparent 55%),
+    radial-gradient(at 97% 96%, hsla(43, 98%, 50%, 0.12) 0px, transparent 55%);
+  filter: blur(100px);
+  opacity: 0.6;
+}
+
+/* Premium stacked shadows with light/dark adaptive opacities */
 .shadow-lvl-1 {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+.dark .shadow-lvl-1 {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .shadow-lvl-2 {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.05);
 }
+.dark .shadow-lvl-2 {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 1px 2px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.3);
+}
 
 .shadow-lvl-3 {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.dark .shadow-lvl-3 {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
 }
 
 .shadow-lvl-4 {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
+.dark .shadow-lvl-4 {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+}
 
 .shadow-lvl-5 {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+.dark .shadow-lvl-5 {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-hairline-strong);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-body);
 }

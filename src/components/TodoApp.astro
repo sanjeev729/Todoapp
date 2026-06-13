@@ -2,87 +2,208 @@
 // src/components/TodoApp.astro
 ---
 
-<div class="relative w-full max-w-2xl mx-auto z-10">
-  <!-- Todo Controller Input Card -->
+<div class="relative w-full max-w-3xl mx-auto z-10 space-y-6">
+  <!-- Dynamic Metrics Dashboard (Linear style) -->
+  <div class="bg-canvas border border-hairline rounded-lg p-5 shadow-lvl-2 transition-shadow duration-300">
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+        <span class="font-mono text-[10px] tracking-wider uppercase text-mute">Workspace Progress</span>
+        <span id="progress-percentage" class="text-xs font-semibold text-success font-mono bg-success/10 px-1.5 py-0.5 rounded">0%</span>
+      </div>
+      <div class="flex items-center gap-4 text-xs font-mono text-body">
+        <div class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-success"></span>
+          <span>Done: <strong id="stats-done" class="text-ink">0</strong></span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-hairline-strong"></span>
+          <span>Active: <strong id="stats-active" class="text-ink">0</strong></span>
+        </div>
+      </div>
+    </div>
+    <!-- Bar track -->
+    <div class="w-full h-1.5 bg-canvas-soft-2 dark:bg-canvas-soft border border-hairline rounded-full overflow-hidden">
+      <div id="progress-bar" class="h-full bg-success transition-all duration-500 ease-out w-0"></div>
+    </div>
+  </div>
+
+  <!-- Main Input Form & Controllers -->
   <div class="bg-canvas border border-hairline rounded-lg p-6 shadow-lvl-3 transition-shadow duration-300 hover:shadow-lvl-4">
-    <form id="todo-form" class="flex gap-3 items-center">
-      <div class="relative flex-1">
+    <form id="todo-form" class="space-y-4">
+      <!-- Task Title input -->
+      <div class="relative">
         <input 
           type="text" 
           id="todo-input" 
-          placeholder="What needs to be done?" 
+          placeholder="What needs to be done? (e.g. Write test documentation)" 
           class="w-full h-11 px-4 py-2 bg-canvas text-ink border border-hairline rounded-[6px] text-sm placeholder-mute focus:outline-none focus:border-hairline-strong focus:ring-1 focus:ring-hairline-strong transition-all font-sans"
           autocomplete="off"
           required
         />
       </div>
-      <button 
-        type="submit" 
-        class="h-11 px-6 bg-primary text-on-primary hover:bg-black/90 text-sm font-medium rounded-[6px] shadow-lvl-1 hover:shadow-lvl-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap"
-      >
-        <span>Add task</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-      </button>
+
+      <!-- Task Metadata selectors (Priority, Project, Due Date) -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <!-- Priority selection -->
+        <div class="flex flex-col gap-1">
+          <label for="todo-priority" class="font-mono text-[10px] uppercase text-mute">Priority</label>
+          <select 
+            id="todo-priority" 
+            class="h-10 px-3 bg-canvas text-ink border border-hairline rounded-[6px] text-xs focus:outline-none focus:border-hairline-strong transition-all font-sans"
+          >
+            <option value="P1">P1 — Critical (Red)</option>
+            <option value="P2">P2 — High (Orange)</option>
+            <option value="P3">P3 — Medium (Purple)</option>
+            <option value="P4" selected>P4 — Low (Gray)</option>
+          </select>
+        </div>
+
+        <!-- Project selection -->
+        <div class="flex flex-col gap-1">
+          <label for="todo-project" class="font-mono text-[10px] uppercase text-mute">Project</label>
+          <input 
+            type="text" 
+            id="todo-project" 
+            placeholder="e.g. Work, Personal, Life" 
+            list="default-projects"
+            class="h-10 px-3 bg-canvas text-ink border border-hairline rounded-[6px] text-xs placeholder-mute focus:outline-none focus:border-hairline-strong transition-all font-sans"
+            autocomplete="off"
+          />
+          <datalist id="default-projects">
+            <option value="Engineering"></option>
+            <option value="Design"></option>
+            <option value="Marketing"></option>
+            <option value="Personal"></option>
+          </datalist>
+        </div>
+
+        <!-- Due Date selection -->
+        <div class="flex flex-col gap-1">
+          <label for="todo-due" class="font-mono text-[10px] uppercase text-mute">Due Date</label>
+          <input 
+            type="date" 
+            id="todo-due" 
+            class="h-10 px-3 bg-canvas text-ink border border-hairline rounded-[6px] text-xs focus:outline-none focus:border-hairline-strong transition-all font-sans"
+          />
+        </div>
+      </div>
+
+      <!-- Actions row -->
+      <div class="flex items-center justify-between pt-2">
+        <span class="text-[11px] text-mute font-sans">Double-click tasks inside the list to edit titles inline.</span>
+        <button 
+          type="submit" 
+          class="h-10 px-6 bg-primary text-on-primary hover:bg-black/90 dark:hover:bg-white/90 text-sm font-medium rounded-[6px] shadow-lvl-1 hover:shadow-lvl-2 transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap"
+        >
+          <span>Create Task</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+      </div>
     </form>
+  </div>
 
-    <!-- Filters & Stats Row -->
-    <div class="flex flex-col sm:flex-row gap-4 items-center justify-between mt-6 pt-4 border-t border-hairline text-xs font-mono text-body">
-      <!-- Remaining Counts -->
-      <div id="todo-stats-count" class="flex items-center gap-1">
-        <span class="font-medium text-ink" id="active-count">0</span>
-        <span>items left</span>
+  <!-- Search, Filter & Sort Ribbon -->
+  <div class="flex flex-col md:flex-row gap-4 items-stretch justify-between bg-canvas border border-hairline rounded-lg p-4 shadow-lvl-2">
+    <!-- Search Bar -->
+    <div class="relative flex-1">
+      <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-mute pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </span>
+      <input 
+        type="text" 
+        id="search-input" 
+        placeholder="Search task title or description notes..." 
+        class="w-full h-9 pl-9 pr-4 bg-canvas text-ink border border-hairline rounded-[6px] text-xs placeholder-mute focus:outline-none focus:border-hairline-strong transition-all"
+      />
+    </div>
+
+    <!-- Controls dropdowns -->
+    <div class="flex flex-wrap items-center gap-3">
+      <!-- Sort selection -->
+      <div class="flex items-center gap-2">
+        <label for="sort-select" class="font-mono text-[10px] text-mute whitespace-nowrap uppercase">Sort By</label>
+        <select 
+          id="sort-select" 
+          class="h-9 px-2 bg-canvas text-ink border border-hairline rounded-[6px] text-xs focus:outline-none focus:border-hairline-strong transition-all"
+        >
+          <option value="created-desc">Newest First</option>
+          <option value="due-asc">Due Date (Soonest)</option>
+          <option value="priority-desc">Priority (Highest)</option>
+          <option value="alphabetical">Title (A-Z)</option>
+        </select>
       </div>
 
-      <!-- Filter Buttons (tab-ghost style) -->
-      <div class="flex gap-1 bg-canvas-soft-2 p-1 rounded-full border border-hairline">
-        <button 
-          type="button" 
-          data-filter="all" 
-          class="filter-btn px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-all bg-canvas text-ink shadow-lvl-1"
+      <!-- Filter project dropdown -->
+      <div class="flex items-center gap-2">
+        <label for="filter-project" class="font-mono text-[10px] text-mute whitespace-nowrap uppercase">Project</label>
+        <select 
+          id="filter-project" 
+          class="h-9 px-2 bg-canvas text-ink border border-hairline rounded-[6px] text-xs focus:outline-none focus:border-hairline-strong transition-all"
         >
-          All
-        </button>
-        <button 
-          type="button" 
-          data-filter="active" 
-          class="filter-btn px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-all hover:text-ink"
-        >
-          Active
-        </button>
-        <button 
-          type="button" 
-          data-filter="completed" 
-          class="filter-btn px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-all hover:text-ink"
-        >
-          Completed
-        </button>
+          <option value="all">All Projects</option>
+          <!-- Hydrated dynamically -->
+        </select>
       </div>
-
-      <!-- Actions -->
-      <button 
-        type="button" 
-        id="clear-completed-btn" 
-        class="hover:text-error text-xs font-medium cursor-pointer transition-colors"
-      >
-        Clear completed
-      </button>
     </div>
   </div>
 
+  <!-- Filters & Workspace tab-ghost header -->
+  <div class="flex flex-col sm:flex-row gap-4 items-center justify-between px-2 text-xs font-mono text-body">
+    <!-- Remaining Counts -->
+    <div class="flex items-center gap-1.5">
+      <span class="font-medium text-ink" id="active-count">0</span>
+      <span>active tasks remaining</span>
+    </div>
+
+    <!-- Filter Buttons (tab-ghost style) -->
+    <div class="flex gap-1 bg-canvas-soft-2 dark:bg-canvas-soft p-1 rounded-full border border-hairline">
+      <button 
+        type="button" 
+        data-filter="all" 
+        class="task-filter-btn px-4 py-1.5 rounded-full text-xs font-medium cursor-pointer transition-all bg-canvas text-ink shadow-lvl-1"
+      >
+        All
+      </button>
+      <button 
+        type="button" 
+        data-filter="active" 
+        class="task-filter-btn px-4 py-1.5 rounded-full text-xs font-medium cursor-pointer transition-all hover:text-ink text-mute"
+      >
+        Active
+      </button>
+      <button 
+        type="button" 
+        data-filter="completed" 
+        class="task-filter-btn px-4 py-1.5 rounded-full text-xs font-medium cursor-pointer transition-all hover:text-ink text-mute"
+      >
+        Completed
+      </button>
+    </div>
+
+    <!-- Actions -->
+    <button 
+      type="button" 
+      id="clear-completed-btn" 
+      class="hover:text-error text-xs font-medium cursor-pointer transition-colors"
+    >
+      Clear completed
+    </button>
+  </div>
+
   <!-- Todo List Container -->
-  <div class="mt-6">
+  <div class="space-y-4">
     <div id="todo-list" class="space-y-3">
       <!-- Dynamic list loaded via client script -->
     </div>
 
     <!-- Empty State Card (ex-empty-state-card) -->
-    <div id="empty-state" class="hidden flex flex-col items-center justify-center py-16 px-6 bg-canvas-soft border border-hairline border-dashed rounded-lg text-center shadow-inner mt-4">
-      <div class="w-12 h-12 rounded-full bg-canvas border border-hairline flex items-center justify-center text-mute shadow-lvl-1 mb-4">
+    <div id="empty-state" class="hidden flex flex-col items-center justify-center py-16 px-6 bg-canvas border border-hairline border-dashed rounded-lg text-center shadow-inner">
+      <div class="w-12 h-12 rounded-full bg-canvas-soft border border-hairline flex items-center justify-center text-mute shadow-lvl-1 mb-4">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-body"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
       </div>
-      <h3 class="text-sm font-semibold text-ink mb-1">No tasks today.</h3>
+      <h3 class="text-sm font-semibold text-ink mb-1">No matching tasks found.</h3>
       <p class="text-xs text-mute max-w-xs leading-relaxed">
-        Your workspace is clean. Create a new task above to begin organizing your workflow.
+        Try adjusting your filters, query, or check off your backlog of tasks.
       </p>
     </div>
   </div>
@@ -94,38 +215,110 @@
 </div>
 
 <script>
-  interface Todo {
+  interface Subtask {
     id: string;
     text: string;
     completed: boolean;
   }
 
+  interface Todo {
+    id: string;
+    text: string;
+    completed: boolean;
+    priority: 'P1' | 'P2' | 'P3' | 'P4';
+    project: string;
+    dueDate: string;
+    subtasks: Subtask[];
+    notes?: string;
+  }
+
   // State
   let todos: Todo[] = [];
   let currentFilter: 'all' | 'active' | 'completed' = 'all';
+  let searchQuery = '';
+  let activeSort = 'created-desc';
+  let activeProjectFilter = 'all';
 
   // Elements
   const todoForm = document.getElementById('todo-form') as HTMLFormElement;
   const todoInput = document.getElementById('todo-input') as HTMLInputElement;
+  const todoPriority = document.getElementById('todo-priority') as HTMLSelectElement;
+  const todoProject = document.getElementById('todo-project') as HTMLInputElement;
+  const todoDue = document.getElementById('todo-due') as HTMLInputElement;
+  
   const todoList = document.getElementById('todo-list') as HTMLDivElement;
   const emptyState = document.getElementById('empty-state') as HTMLDivElement;
   const activeCountEl = document.getElementById('active-count') as HTMLSpanElement;
   const clearCompletedBtn = document.getElementById('clear-completed-btn') as HTMLButtonElement;
-  const filterBtns = document.querySelectorAll('.filter-btn');
+  const filterBtns = document.querySelectorAll('.task-filter-btn');
   const toastContainer = document.getElementById('toast-container') as HTMLDivElement;
+
+  // Search & Filter & Sort controls
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
+  const filterProject = document.getElementById('filter-project') as HTMLSelectElement;
+
+  // Metrics elements
+  const progressBar = document.getElementById('progress-bar') as HTMLDivElement;
+  const progressPercentage = document.getElementById('progress-percentage') as HTMLSpanElement;
+  const statsDone = document.getElementById('stats-done') as HTMLSpanElement;
+  const statsActive = document.getElementById('stats-active') as HTMLSpanElement;
 
   // Load Todos from LocalStorage
   function loadTodos() {
     try {
-      const stored = localStorage.getItem('taskflow_todos');
+      const stored = localStorage.getItem('taskflow_todos_upgraded');
       if (stored) {
         todos = JSON.parse(stored);
       } else {
-        // Sample baseline todos
+        // Mock default data matching professional developer scenarios
         todos = [
-          { id: '1', text: 'Define styling guidelines in global.css', completed: true },
-          { id: '2', text: 'Create dynamic Todo component', completed: false },
-          { id: '3', text: 'Verify responsive build compile', completed: false }
+          {
+            id: '1',
+            text: 'Configure Tailwind CSS v4 custom theme mappings',
+            completed: true,
+            priority: 'P1',
+            project: 'Engineering',
+            dueDate: new Date().toISOString().split('T')[0],
+            subtasks: [
+              { id: '1-1', text: 'Set CSS variables for light/dark theme', completed: true },
+              { id: '1-2', text: 'Define custom stacked shadows', completed: true }
+            ],
+            notes: 'Need to make sure shadows look extremely premium and use small multiple offsets.'
+          },
+          {
+            id: '2',
+            text: 'Upgrade TodoApp component to support task priorities',
+            completed: false,
+            priority: 'P2',
+            project: 'Engineering',
+            dueDate: new Date(Date.now() + 86400000).toISOString().split('T')[0], // tomorrow
+            subtasks: [
+              { id: '2-1', text: 'Define dropdown options', completed: true },
+              { id: '2-2', text: 'Implement color-coded priority badges', completed: false }
+            ],
+            notes: 'Critical (P1), High (P2), Medium (P3), Low (P4).'
+          },
+          {
+            id: '3',
+            text: 'Integrate dynamic task sorting and search matrices',
+            completed: false,
+            priority: 'P3',
+            project: 'Engineering',
+            dueDate: '',
+            subtasks: [],
+            notes: 'Allows sorting by priority, due date, creation date, and alphanumeric filters.'
+          },
+          {
+            id: '4',
+            text: 'Review UX interface matching Web Design Guidelines',
+            completed: false,
+            priority: 'P4',
+            project: 'Design',
+            dueDate: new Date(Date.now() - 86400000).toISOString().split('T')[0], // yesterday (overdue)
+            subtasks: [],
+            notes: 'Double-check accessibility, color contrasts, font sizing, and mobile responsiveness.'
+          }
         ];
         saveTodos();
       }
@@ -138,18 +331,43 @@
   // Save Todos to LocalStorage
   function saveTodos() {
     try {
-      localStorage.setItem('taskflow_todos', JSON.stringify(todos));
+      localStorage.setItem('taskflow_todos_upgraded', JSON.stringify(todos));
     } catch (e) {
       console.error('Error saving todos:', e);
     }
   }
 
-  // Render Toasts (ex-toast layout)
+  // Render Project selection dropdown
+  function renderProjectFilterOptions() {
+    const previousSelection = filterProject.value;
+    
+    // Get unique non-empty projects
+    const projects = Array.from(new Set(todos.map(t => t.project).filter(Boolean)));
+    
+    // Reset options
+    filterProject.innerHTML = '<option value="all">All Projects</option>';
+    projects.forEach(p => {
+      const option = document.createElement('option');
+      option.value = p;
+      option.textContent = p;
+      filterProject.appendChild(option);
+    });
+
+    // Restore selection if it still exists
+    if (projects.includes(previousSelection) || previousSelection === 'all') {
+      filterProject.value = previousSelection;
+      activeProjectFilter = previousSelection;
+    } else {
+      filterProject.value = 'all';
+      activeProjectFilter = 'all';
+    }
+  }
+
+  // Toast Alerts (ex-toast layout)
   function showToast(message: string, type: 'success' | 'info' | 'error' = 'success') {
     const toast = document.createElement('div');
     toast.className = 'pointer-events-auto flex items-center justify-between bg-canvas border border-hairline rounded-md px-4 py-3 shadow-lvl-4 transform translate-y-4 opacity-0 transition-all duration-300 max-w-sm w-full font-sans text-xs';
     
-    // Icon color based on type
     let iconColor = 'text-success';
     let iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
     
@@ -172,18 +390,9 @@
     `;
 
     toastContainer.appendChild(toast);
+    setTimeout(() => toast.classList.remove('translate-y-4', 'opacity-0'), 10);
 
-    // Trigger animation
-    setTimeout(() => {
-      toast.classList.remove('translate-y-4', 'opacity-0');
-    }, 10);
-
-    // Auto remove
-    const timer = setTimeout(() => {
-      removeToast(toast);
-    }, 4000);
-
-    // Close click handler
+    const timer = setTimeout(() => removeToast(toast), 4000);
     toast.querySelector('.toast-close')?.addEventListener('click', () => {
       clearTimeout(timer);
       removeToast(toast);
@@ -192,87 +401,296 @@
 
   function removeToast(toast: HTMLDivElement) {
     toast.classList.add('translate-y-[-4px]', 'opacity-0');
-    setTimeout(() => {
-      toast.remove();
-    }, 300);
+    setTimeout(() => toast.remove(), 300);
   }
 
-  // Render Todos
+  // Formatting date strings
+  function formatDueDate(dateStr: string) {
+    if (!dateStr) return '';
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const targetDate = new Date(dateStr + 'T00:00:00');
+    targetDate.setHours(0, 0, 0, 0);
+
+    const diffTime = targetDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) {
+      return { text: 'Today', class: 'text-warning bg-warning-soft border-warning/20' };
+    } else if (diffDays === 1) {
+      return { text: 'Tomorrow', class: 'text-link bg-link/10 border-link/10' };
+    } else if (diffDays === -1) {
+      return { text: 'Yesterday (Overdue)', class: 'text-error bg-error-soft border-error/20 font-semibold' };
+    } else if (diffDays < -1) {
+      return { text: `${Math.abs(diffDays)}d overdue`, class: 'text-error bg-error-soft border-error/20 font-semibold' };
+    } else {
+      // Future dates
+      const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
+      return { text: targetDate.toLocaleDateString('en-US', options), class: 'text-body bg-canvas-soft-2 border-hairline' };
+    }
+  }
+
+  // Escape HTML helper
+  function escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.innerText = text;
+    return div.innerHTML;
+  }
+
+  // Render List
   function render() {
-    // Filter logic
-    const filteredTodos = todos.filter(todo => {
-      if (currentFilter === 'active') return !todo.completed;
-      if (currentFilter === 'completed') return todo.completed;
+    renderProjectFilterOptions();
+
+    // 1. Filtering logic
+    let filtered = todos.filter(todo => {
+      // Toggle Filter (All, Active, Completed)
+      if (currentFilter === 'active' && todo.completed) return false;
+      if (currentFilter === 'completed' && !todo.completed) return false;
+
+      // Search Query filter (matches Title or Description notes)
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const matchesTitle = todo.text.toLowerCase().includes(query);
+        const matchesNotes = todo.notes ? todo.notes.toLowerCase().includes(query) : false;
+        if (!matchesTitle && !matchesNotes) return false;
+      }
+
+      // Project filter
+      if (activeProjectFilter !== 'all' && todo.project !== activeProjectFilter) return false;
+
       return true;
     });
 
-    // Clear previous
+    // 2. Sorting logic
+    filtered.sort((a, b) => {
+      if (activeSort === 'alphabetical') {
+        return a.text.localeCompare(b.text);
+      }
+      if (activeSort === 'priority-desc') {
+        const priorityWeight = { P1: 4, P2: 3, P3: 2, P4: 1 };
+        const weightA = priorityWeight[a.priority] || 0;
+        const weightB = priorityWeight[b.priority] || 0;
+        return weightB - weightA || Number(b.id) - Number(a.id);
+      }
+      if (activeSort === 'due-asc') {
+        // Put empty dates at the bottom
+        if (!a.dueDate) return 1;
+        if (!b.dueDate) return -1;
+        return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+      }
+      // default: created-desc
+      return Number(b.id) - Number(a.id);
+    });
+
+    // Clear list
     todoList.innerHTML = '';
 
-    if (filteredTodos.length === 0) {
+    if (filtered.length === 0) {
       emptyState.classList.remove('hidden');
     } else {
       emptyState.classList.add('hidden');
-      
-      // Build elements
-      filteredTodos.forEach(todo => {
+
+      filtered.forEach(todo => {
+        const dateDetails = formatDueDate(todo.dueDate);
+        
+        // Priority styles
+        let priorityBadgeClass = '';
+        let priorityLabel = '';
+        let priorityIndicatorColor = '';
+
+        if (todo.priority === 'P1') {
+          priorityBadgeClass = 'text-error bg-error-soft/60 border-error-deep/20';
+          priorityLabel = 'P1 — Critical';
+          priorityIndicatorColor = 'bg-error';
+        } else if (todo.priority === 'P2') {
+          priorityBadgeClass = 'text-warning-deep bg-warning-soft/75 border-warning-deep/25';
+          priorityLabel = 'P2 — High';
+          priorityIndicatorColor = 'bg-warning';
+        } else if (todo.priority === 'P3') {
+          priorityBadgeClass = 'text-violet bg-violet-soft/60 border-violet/20';
+          priorityLabel = 'P3 — Medium';
+          priorityIndicatorColor = 'bg-violet';
+        } else {
+          priorityBadgeClass = 'text-mute bg-canvas-soft-2 border-hairline';
+          priorityLabel = 'P4 — Low';
+          priorityIndicatorColor = 'bg-hairline-strong';
+        }
+
+        const totalSubtasks = todo.subtasks.length;
+        const completedSubtasks = todo.subtasks.filter(s => s.completed).length;
+        const subtasksProgressText = totalSubtasks > 0 ? `${completedSubtasks}/${totalSubtasks} steps` : '';
+
         const item = document.createElement('div');
-        item.className = `group flex items-center justify-between bg-canvas border border-hairline rounded-md px-4 py-3 shadow-lvl-1 hover:shadow-lvl-2 transition-all duration-200 animate-in fade-in duration-200 ${todo.completed ? 'bg-canvas-soft-2/50 border-hairline/60' : ''}`;
+        item.className = `group flex flex-col bg-canvas border border-hairline rounded-lg shadow-lvl-1 hover:shadow-lvl-2 transition-all duration-200 overflow-hidden ${todo.completed ? 'bg-canvas-soft-2/50 border-hairline/60' : ''}`;
         item.setAttribute('data-id', todo.id);
 
         item.innerHTML = `
-          <div class="flex items-center gap-3 flex-1 min-w-0">
-            <!-- Custom checkbox -->
-            <button 
-              type="button" 
-              class="todo-check-btn flex-shrink-0 w-5 h-5 rounded-full border ${todo.completed ? 'bg-primary border-primary text-on-primary' : 'bg-canvas border-hairline-strong hover:border-ink'} flex items-center justify-center transition-all cursor-pointer"
-              aria-label="${todo.completed ? 'Mark incomplete' : 'Mark complete'}"
-            >
-              <svg class="w-3 h-3 ${todo.completed ? 'block' : 'hidden'}" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
-              </svg>
-            </button>
+          <!-- Main Content Row -->
+          <div class="flex items-start justify-between px-4 py-3.5 gap-3">
+            <!-- Left strip for Priority Indicator -->
+            <div class="w-1.5 self-stretch rounded-full ${priorityIndicatorColor} opacity-70 group-hover:opacity-100 transition-opacity"></div>
+            
+            <!-- Checkbox and text -->
+            <div class="flex items-start gap-3 flex-1 min-w-0">
+              <button 
+                type="button" 
+                class="todo-check-btn flex-shrink-0 mt-0.5 w-5 h-5 rounded-full border ${todo.completed ? 'bg-primary border-primary text-on-primary' : 'bg-canvas border-hairline-strong hover:border-ink'} flex items-center justify-center transition-all cursor-pointer shadow-sm"
+                aria-label="${todo.completed ? 'Mark active' : 'Mark completed'}"
+              >
+                <svg class="w-3 h-3 ${todo.completed ? 'block' : 'hidden'}" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+                </svg>
+              </button>
 
-            <!-- Editable Text content -->
-            <div class="flex-1 min-w-0 pr-4">
-              <span class="todo-text block text-sm font-sans truncate cursor-pointer select-none transition-all duration-200 py-1 ${todo.completed ? 'text-mute line-through' : 'text-ink'}" title="Double click to edit">
-                ${escapeHtml(todo.text)}
-              </span>
-              <input 
-                type="text" 
-                class="todo-edit-input hidden w-full px-2 py-1 text-sm bg-canvas border border-hairline-strong rounded-[4px] focus:outline-none focus:ring-1 focus:ring-ink"
-                value="${escapeHtml(todo.text)}"
-              />
+              <div class="flex-1 min-w-0">
+                <!-- Text title (double-click to edit) -->
+                <div class="relative py-0.5">
+                  <span class="todo-text block text-sm font-semibold tracking-tight cursor-pointer select-none truncate transition-all ${todo.completed ? 'text-mute line-through font-normal' : 'text-ink'}" title="Double click to edit">
+                    ${escapeHtml(todo.text)}
+                  </span>
+                  <input 
+                    type="text" 
+                    class="todo-edit-input hidden w-full px-2 py-0.5 text-sm font-semibold tracking-tight bg-canvas border border-hairline-strong rounded-[4px] focus:outline-none focus:ring-1 focus:ring-ink"
+                    value="${escapeHtml(todo.text)}"
+                  />
+                </div>
+
+                <!-- Meta Badges Line -->
+                <div class="flex flex-wrap items-center gap-2 mt-2">
+                  <!-- Priority Badge -->
+                  <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono border ${priorityBadgeClass}">
+                    ${priorityLabel}
+                  </span>
+
+                  <!-- Project Badge -->
+                  ${todo.project ? `
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono bg-canvas border border-hairline text-body">
+                      #${escapeHtml(todo.project)}
+                    </span>
+                  ` : ''}
+
+                  <!-- Due Date Badge -->
+                  ${todo.dueDate ? `
+                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono border ${dateDetails.class}">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                      <span>${dateDetails.text}</span>
+                    </span>
+                  ` : ''}
+
+                  <!-- Subtask summary badge -->
+                  ${totalSubtasks > 0 ? `
+                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono bg-canvas-soft border border-hairline text-body">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"></line><line x1="9" y1="12" x2="20" y2="12"></line><line x1="9" y1="18" x2="20" y2="18"></line><line x1="5" y1="6" x2="5.01" y2="6"></line><line x1="5" y1="12" x2="5.01" y2="12"></line><line x1="5" y1="18" x2="5.01" y2="18"></line></svg>
+                      <span>${subtasksProgressText}</span>
+                    </span>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions block -->
+            <div class="flex items-center gap-1.5">
+              <button 
+                type="button" 
+                class="todo-expand-btn p-1.5 text-body hover:text-ink hover:bg-canvas-soft border border-transparent hover:border-hairline rounded-[6px] transition-all cursor-pointer flex items-center justify-center"
+                aria-label="Expand options"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transform transition-transform duration-200 expand-icon"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+              <button 
+                type="button" 
+                class="todo-del-btn p-1.5 text-body hover:text-error hover:bg-error-soft/30 border border-transparent hover:border-hairline rounded-[6px] transition-all cursor-pointer flex items-center justify-center"
+                aria-label="Delete task"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+              </button>
             </div>
           </div>
 
-          <!-- Actions -->
-          <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-150">
-            <button 
-              type="button" 
-              class="todo-edit-btn p-1.5 text-body hover:text-ink hover:bg-canvas-soft rounded transition-all cursor-pointer" 
-              aria-label="Edit task"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"></path></svg>
-            </button>
-            <button 
-              type="button" 
-              class="todo-del-btn p-1.5 text-body hover:text-error hover:bg-error-soft/30 rounded transition-all cursor-pointer" 
-              aria-label="Delete task"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-            </button>
+          <!-- Extended Drawer Panel (Subtasks, Notes) -->
+          <div class="todo-drawer hidden border-t border-hairline bg-canvas-soft/40 px-5 py-4 space-y-4">
+            <!-- Notes / description -->
+            <div class="space-y-1">
+              <label class="font-mono text-[9px] uppercase tracking-wider text-mute block">Description Notes</label>
+              <textarea 
+                class="todo-notes-input w-full min-h-[60px] p-2 text-xs bg-canvas border border-hairline rounded-[6px] focus:outline-none focus:border-hairline-strong transition-all resize-y"
+                placeholder="Add task specifications, links, or developer instructions..."
+              >${todo.notes || ''}</textarea>
+            </div>
+
+            <!-- Subtasks Checklist -->
+            <div class="space-y-2">
+              <label class="font-mono text-[9px] uppercase tracking-wider text-mute block">Checklist Steps</label>
+              
+              <!-- Checklist elements -->
+              <div class="subtask-list space-y-2">
+                ${todo.subtasks.map(sub => `
+                  <div class="flex items-center justify-between gap-2 bg-canvas px-3 py-1.5 border border-hairline rounded-[6px] shadow-sm animate-in fade-in duration-150">
+                    <div class="flex items-center gap-2.5 flex-1 min-w-0">
+                      <button 
+                        type="button" 
+                        data-sub-id="${sub.id}"
+                        class="subtask-check-btn flex-shrink-0 w-4.5 h-4.5 rounded-full border ${sub.completed ? 'bg-primary border-primary text-on-primary' : 'bg-canvas border-hairline-strong hover:border-ink'} flex items-center justify-center transition-all cursor-pointer"
+                      >
+                        <svg class="w-2.5 h-2.5 ${sub.completed ? 'block' : 'hidden'}" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+                        </svg>
+                      </button>
+                      <span class="text-xs truncate ${sub.completed ? 'text-mute line-through' : 'text-ink'}">${escapeHtml(sub.text)}</span>
+                    </div>
+                    <button 
+                      type="button" 
+                      data-sub-id="${sub.id}"
+                      class="subtask-del-btn text-mute hover:text-error transition-colors p-1"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                  </div>
+                `).join('')}
+              </div>
+
+              <!-- Create subtask input -->
+              <form class="subtask-form flex items-center gap-2 mt-2">
+                <input 
+                  type="text" 
+                  placeholder="Add a step..." 
+                  class="subtask-input flex-1 h-8 px-3.5 bg-canvas border border-hairline rounded-[6px] text-xs placeholder:text-mute focus:outline-none focus:border-hairline-strong"
+                  required
+                />
+                <button 
+                  type="submit" 
+                  class="h-8 px-3 bg-canvas border border-hairline hover:bg-canvas-soft text-xs font-semibold rounded-[6px] cursor-pointer shadow-sm text-ink transition-colors flex items-center gap-1.5"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>Step</span>
+                </button>
+              </form>
+            </div>
           </div>
         `;
 
-        // Attach events
-        // Toggle completed
-        item.querySelector('.todo-check-btn')?.addEventListener('click', () => toggleCompleted(todo.id));
+        // Attach DOM Events to rendered items
+        item.querySelector('.todo-check-btn')?.addEventListener('click', () => toggleTodoCompleted(todo.id));
+        item.querySelector('.todo-del-btn')?.addEventListener('click', () => deleteTodo(todo.id));
+
+        // Toggle Drawer expansion
+        const expandBtn = item.querySelector('.todo-expand-btn') as HTMLButtonElement;
+        const drawer = item.querySelector('.todo-drawer') as HTMLDivElement;
+        const expandIcon = item.querySelector('.expand-icon') as SVGElement;
         
-        // Double click to edit or click the edit icon
+        expandBtn?.addEventListener('click', () => {
+          const isHidden = drawer.classList.toggle('hidden');
+          if (isHidden) {
+            expandIcon.style.transform = 'rotate(0deg)';
+          } else {
+            expandIcon.style.transform = 'rotate(180deg)';
+          }
+        });
+
+        // Double-click edit title title
         const textSpan = item.querySelector('.todo-text') as HTMLSpanElement;
         const editInput = item.querySelector('.todo-edit-input') as HTMLInputElement;
-        const editBtn = item.querySelector('.todo-edit-btn') as HTMLButtonElement;
 
         const startEdit = () => {
           textSpan.classList.add('hidden');
@@ -291,31 +709,70 @@
         };
 
         textSpan?.addEventListener('dblclick', startEdit);
-        editBtn?.addEventListener('click', startEdit);
-
         editInput?.addEventListener('blur', finishEdit);
         editInput?.addEventListener('keydown', (e) => {
           if (e.key === 'Enter') {
             finishEdit();
           } else if (e.key === 'Escape') {
-            editInput.value = todo.text; // reset
+            editInput.value = todo.text;
             textSpan.classList.remove('hidden');
             editInput.classList.add('hidden');
           }
         });
 
-        // Delete todo
-        item.querySelector('.todo-del-btn')?.addEventListener('click', () => deleteTodo(todo.id));
+        // Notes description text change
+        const notesInput = item.querySelector('.todo-notes-input') as HTMLTextAreaElement;
+        notesInput?.addEventListener('change', (e) => {
+          const val = (e.currentTarget as HTMLTextAreaElement).value;
+          updateTodoNotes(todo.id, val);
+        });
+
+        // Subtask forms submits
+        const subform = item.querySelector('.subtask-form') as HTMLFormElement;
+        const subinput = item.querySelector('.subtask-input') as HTMLInputElement;
+        subform?.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const val = subinput.value.trim();
+          if (val) {
+            addSubtask(todo.id, val);
+            subinput.value = '';
+          }
+        });
+
+        // Subtasks buttons checks / deletes
+        item.querySelectorAll('.subtask-check-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const subId = (e.currentTarget as HTMLButtonElement).getAttribute('data-sub-id')!;
+            toggleSubtaskCompleted(todo.id, subId);
+          });
+        });
+
+        item.querySelectorAll('.subtask-del-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const subId = (e.currentTarget as HTMLButtonElement).getAttribute('data-sub-id')!;
+            deleteSubtask(todo.id, subId);
+          });
+        });
 
         todoList.appendChild(item);
       });
     }
 
-    // Update remaining items count
-    const remainingCount = todos.filter(t => !t.completed).length;
-    activeCountEl.textContent = remainingCount.toString();
+    // 3. Update active count label
+    const activeTodosCount = todos.filter(t => !t.completed).length;
+    activeCountEl.textContent = activeTodosCount.toString();
 
-    // Show/hide clear completed button
+    // 4. Update dynamic metrics dashboard
+    const totalCount = todos.length;
+    const completedCount = todos.filter(t => t.completed).length;
+    const percent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+    
+    progressBar.style.width = `${percent}%`;
+    progressPercentage.textContent = `${percent}%`;
+    statsDone.textContent = completedCount.toString();
+    statsActive.textContent = (totalCount - completedCount).toString();
+
+    // 5. Hide/show clear completed
     const hasCompleted = todos.some(t => t.completed);
     if (hasCompleted) {
       clearCompletedBtn.classList.remove('invisible');
@@ -326,44 +783,49 @@
     }
   }
 
-  // Utilities
-  function escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.innerText = text;
-    return div.innerHTML;
-  }
-
-  // Actions
-  function addTodo(text: string) {
+  // State modification actions
+  function addTodo(text: string, priority: 'P1' | 'P2' | 'P3' | 'P4', project: string, dueDate: string) {
     const newTodo: Todo = {
       id: Date.now().toString(),
-      text: text,
-      completed: false
+      text,
+      completed: false,
+      priority,
+      project: project.trim(),
+      dueDate,
+      subtasks: []
     };
     todos.unshift(newTodo);
     saveTodos();
     render();
-    showToast(`Task added: "${text}"`, 'success');
+    showToast(`Task created: "${text}"`, 'success');
   }
 
-  function toggleCompleted(id: string) {
+  function toggleTodoCompleted(id: string) {
     const todo = todos.find(t => t.id === id);
     if (todo) {
       todo.completed = !todo.completed;
       saveTodos();
       render();
-      showToast(todo.completed ? `Task completed` : `Task active`, 'info');
+      showToast(todo.completed ? 'Task completed' : 'Task marked active', 'info');
     }
   }
 
-  function editTodoText(id: string, newText: string) {
+  function editTodoText(id: string, text: string) {
     const todo = todos.find(t => t.id === id);
     if (todo) {
-      const oldText = todo.text;
-      todo.text = newText;
+      todo.text = text;
       saveTodos();
       render();
-      showToast(`Task updated`, 'info');
+      showToast('Task title updated', 'info');
+    }
+  }
+
+  function updateTodoNotes(id: string, notes: string) {
+    const todo = todos.find(t => t.id === id);
+    if (todo) {
+      todo.notes = notes;
+      saveTodos();
+      showToast('Description notes saved', 'info');
     }
   }
 
@@ -373,49 +835,119 @@
       todos = todos.filter(t => t.id !== id);
       saveTodos();
       render();
-      showToast(`Task deleted`, 'error');
+      showToast('Task deleted', 'error');
     }
   }
 
-  // Add event submit
+  // Subtask management
+  function addSubtask(todoId: string, text: string) {
+    const todo = todos.find(t => t.id === todoId);
+    if (todo) {
+      const newSub: Subtask = {
+        id: `${todoId}-${Date.now()}`,
+        text,
+        completed: false
+      };
+      todo.subtasks.push(newSub);
+      saveTodos();
+      render();
+      showToast('Step added', 'success');
+    }
+  }
+
+  function toggleSubtaskCompleted(todoId: string, subId: string) {
+    const todo = todos.find(t => t.id === todoId);
+    if (todo) {
+      const sub = todo.subtasks.find(s => s.id === subId);
+      if (sub) {
+        sub.completed = !sub.completed;
+        saveTodos();
+        render();
+        showToast(sub.completed ? 'Step checked off' : 'Step marked active', 'info');
+      }
+    }
+  }
+
+  function deleteSubtask(todoId: string, subId: string) {
+    const todo = todos.find(t => t.id === todoId);
+    if (todo) {
+      todo.subtasks = todo.subtasks.filter(s => s.id !== subId);
+      saveTodos();
+      render();
+      showToast('Step deleted', 'error');
+    }
+  }
+
+  // Submit main form
   todoForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const val = todoInput.value.trim();
+    const priority = todoPriority.value as 'P1' | 'P2' | 'P3' | 'P4';
+    const project = todoProject.value.trim();
+    const due = todoDue.value;
+
     if (val) {
-      addTodo(val);
+      addTodo(val, priority, project, due);
+      
+      // Reset inputs
       todoInput.value = '';
+      todoPriority.value = 'P4';
+      todoProject.value = '';
+      todoDue.value = '';
     }
   });
 
-  // Clear completed handler
+  // Clear completed click
   clearCompletedBtn.addEventListener('click', () => {
-    const beforeCount = todos.length;
+    const origLength = todos.length;
     todos = todos.filter(t => !t.completed);
-    const deletedCount = beforeCount - todos.length;
-    if (deletedCount > 0) {
+    const diff = origLength - todos.length;
+    if (diff > 0) {
       saveTodos();
       render();
-      showToast(`Cleared ${deletedCount} completed tasks`, 'info');
+      showToast(`Cleared ${diff} completed tasks`, 'info');
     }
   });
 
-  // Filter click handlers
+  // Filters click handlers
   filterBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       const target = e.currentTarget as HTMLButtonElement;
-      const filter = target.getAttribute('data-filter') as 'all' | 'active' | 'completed';
+      currentFilter = target.getAttribute('data-filter') as 'all' | 'active' | 'completed';
       
-      // Update active state class styles
       filterBtns.forEach(b => {
         b.classList.remove('bg-canvas', 'text-ink', 'shadow-lvl-1');
-        b.classList.add('hover:text-ink');
+        b.classList.add('text-mute', 'hover:text-ink');
       });
       target.classList.add('bg-canvas', 'text-ink', 'shadow-lvl-1');
-      target.classList.remove('hover:text-ink');
+      target.classList.remove('text-mute', 'hover:text-ink');
 
-      currentFilter = filter;
       render();
     });
+  });
+
+  // Search input typing
+  searchInput.addEventListener('input', (e) => {
+    searchQuery = (e.target as HTMLInputElement).value;
+    render();
+  });
+
+  // Sorting selection
+  sortSelect.addEventListener('change', (e) => {
+    activeSort = (e.target as HTMLSelectElement).value;
+    render();
+  });
+
+  // Project filtering selection
+  filterProject.addEventListener('change', (e) => {
+    activeProjectFilter = (e.target as HTMLSelectElement).value;
+    render();
+  });
+
+  // Support responsive theme dynamic changes if needed
+  window.addEventListener('theme-change', () => {
+    // Re-render elements that might require manual styling updates
+    render();
   });
 
   // Initialize

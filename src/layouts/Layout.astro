@@ -22,6 +22,19 @@ const {
 		<meta name="description" content={description} />
 		<title>{title}</title>
 		
+		<!-- Inline script to set theme class before rendering -->
+		<script is:inline>
+			(() => {
+				const theme = localStorage.getItem('taskflow_theme') || 
+					(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+				if (theme === 'dark') {
+					document.documentElement.classList.add('dark');
+				} else {
+					document.documentElement.classList.remove('dark');
+				}
+			})();
+		</script>
+
 		<!-- Preconnecting and loading Inter & JetBrains Mono -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

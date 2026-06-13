@@ -1,39 +1,126 @@
 ---
 // src/pages/index.astro
-import Layout from '../layouts/Layout.astro';
-import TodoApp from '../components/TodoApp.astro';
+import Layout from "../layouts/Layout.astro";
+import TodoApp from "../components/TodoApp.astro";
 ---
 
-<Layout 
+<Layout
   title="Taskflow — Clean Developer Todo Platform"
   description="Manage your project sprint tasks using a premium, distraction-free environment built on Vercel design specs."
 >
   <!-- Sticky Top Navigation -->
-  <header class="sticky top-0 w-full h-16 bg-canvas/80 backdrop-blur-md border-b border-hairline z-50 transition-all duration-300">
-    <div class="max-w-[1400px] h-full mx-auto px-6 flex items-center justify-between">
+  <header
+    class="sticky top-0 w-full h-16 bg-canvas/80 backdrop-blur-md border-b border-hairline z-50 transition-all duration-300"
+  >
+    <div
+      class="max-w-[1400px] h-full mx-auto px-6 flex items-center justify-between"
+    >
       <!-- Logo / Brand -->
       <a href="/" class="flex items-center gap-2 group">
-        <svg class="w-5 h-5 text-ink group-hover:scale-110 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          class="w-5 h-5 text-ink group-hover:scale-110 transition-transform duration-200"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
           <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
-        <span class="font-sans font-semibold tracking-[-0.6px] text-ink text-base">Taskflow</span>
+        <span
+          class="font-sans font-semibold tracking-[-0.6px] text-ink text-base"
+          >Taskflow</span
+        >
       </a>
 
       <!-- Middle Links -->
       <nav class="hidden md:flex items-center gap-6">
-        <a href="#features" class="text-body hover:text-ink text-sm font-medium transition-colors">Features</a>
-        <a href="#dashboard" class="text-body hover:text-ink text-sm font-medium transition-colors">Workspace</a>
-        <a href="https://github.com" target="_blank" rel="noopener" class="text-body hover:text-ink text-sm font-medium transition-colors flex items-center gap-1">
+        <a
+          href="#features"
+          class="text-body hover:text-ink text-sm font-medium transition-colors"
+          >Features</a
+        >
+        <a
+          href="#dashboard"
+          class="text-body hover:text-ink text-sm font-medium transition-colors"
+          >Workspace</a
+        >
+        <a
+          href="https://github.com"
+          target="_blank"
+          rel="noopener"
+          class="text-body hover:text-ink text-sm font-medium transition-colors flex items-center gap-1"
+        >
           <span>GitHub</span>
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          <svg
+            class="w-3.5 h-3.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+            ></path><polyline points="15 3 21 3 21 9"></polyline><line
+              x1="10"
+              y1="14"
+              x2="21"
+              y2="3"></line></svg
+          >
         </a>
       </nav>
 
       <!-- Right Actions (nav-cta-signup style) -->
       <div class="flex items-center gap-3">
-        <a 
-          href="#dashboard" 
+        <button
+          id="theme-toggle"
+          class="w-7 h-7 flex items-center justify-center bg-canvas border border-hairline hover:border-hairline-strong text-ink rounded-[6px] shadow-lvl-1 cursor-pointer transition-colors"
+          aria-label="Toggle theme"
+        >
+          <!-- Sun Icon (visible in dark mode) -->
+          <svg
+            id="theme-sun"
+            class="hidden w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><circle cx="12" cy="12" r="5"></circle><line
+              x1="12"
+              y1="1"
+              x2="12"
+              y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line
+              x1="4.22"
+              y1="4.22"
+              x2="5.64"
+              y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"
+            ></line><line x1="1" y1="12" x2="3" y2="12"></line><line
+              x1="21"
+              y1="12"
+              x2="23"
+              y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"
+            ></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg
+          >
+          <!-- Moon Icon (visible in light mode) -->
+          <svg
+            id="theme-moon"
+            class="hidden w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+            ></path></svg
+          >
+        </button>
+        <a
+          href="#dashboard"
           class="h-7 px-3 bg-primary text-on-primary hover:bg-black/90 text-xs font-semibold rounded-[6px] transition-colors flex items-center justify-center shadow-lvl-1 cursor-pointer"
         >
           Open App
@@ -45,57 +132,92 @@ import TodoApp from '../components/TodoApp.astro';
   <!-- Main Body Content -->
   <main class="relative w-full min-h-screen overflow-hidden pb-24">
     <!-- Atmospheric Mesh Gradient Backdrop -->
-    <div class="absolute inset-0 top-0 left-0 w-full h-[600px] pointer-events-none z-0 overflow-hidden">
-      <div class="mesh-gradient absolute -top-[20%] left-[10%] w-[80%] h-[100%] rounded-full"></div>
+    <div
+      class="absolute inset-0 top-0 left-0 w-full h-[600px] pointer-events-none z-0 overflow-hidden"
+    >
+      <div
+        class="mesh-gradient absolute -top-[20%] left-[10%] w-[80%] h-[100%] rounded-full"
+      >
+      </div>
     </div>
 
     <!-- Hero Section -->
-    <section class="relative max-w-[1400px] mx-auto px-6 pt-20 pb-12 flex flex-col items-center text-center z-10">
+    <section
+      class="relative max-w-[1400px] mx-auto px-6 pt-20 pb-12 flex flex-col items-center text-center z-10"
+    >
       <!-- Announcement badge (banner-marketing) -->
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-canvas border border-hairline rounded-full shadow-lvl-1 text-xs font-medium text-body mb-6 hover:border-hairline-strong transition-colors">
+      <div
+        class="inline-flex items-center gap-1.5 px-3 py-1 bg-canvas border border-hairline rounded-full shadow-lvl-1 text-xs font-medium text-body mb-6 hover:border-hairline-strong transition-colors"
+      >
         <span class="inline-block w-1.5 h-1.5 rounded-full bg-success"></span>
-        <span class="font-mono text-[10px] tracking-wider uppercase text-mute mr-1">Status</span>
+        <span
+          class="font-mono text-[10px] tracking-wider uppercase text-mute mr-1"
+          >Status</span
+        >
         <span>Astro v6 & Tailwind CSS v4 Engine Live</span>
       </div>
 
       <!-- Main Headline (display-xl) -->
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-2px] text-ink leading-tight max-w-3xl mb-6 font-sans">
-        Streamline your focus.<br/>Build developer velocity.
+      <h1
+        class="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-2px] text-ink leading-tight max-w-3xl mb-6 font-sans"
+      >
+        Your sprint, compiled.<br />Build in flow.
       </h1>
 
       <!-- Supporting Body paragraph -->
       <p class="text-base md:text-lg text-body max-w-xl leading-relaxed mb-8">
-        A premium task manager built specifically to organize workflow. Zero distraction, instant load speeds, and intuitive double-click inline editing.
+        A premium task manager built specifically to organize workflow. Zero
+        distraction, instant load speeds, and intuitive double-click inline
+        editing.
       </p>
 
       <!-- CTAs (button-primary & button-secondary) -->
       <div class="flex items-center gap-4">
-        <a 
-          href="#dashboard" 
+        <a
+          href="#dashboard"
           class="px-6 py-3 bg-primary text-on-primary hover:bg-black/90 font-medium rounded-full shadow-lvl-2 hover:shadow-lvl-3 transition-all text-sm cursor-pointer"
         >
           Launch Workspace
         </a>
-        <a 
-          href="https://github.com" 
-          target="_blank" 
-          rel="noopener" 
+        <a
+          href="https://github.com"
+          target="_blank"
+          rel="noopener"
           class="px-6 py-3 bg-canvas text-ink hover:bg-canvas-soft border border-hairline font-medium rounded-full shadow-lvl-1 hover:shadow-lvl-2 transition-all text-sm cursor-pointer flex items-center gap-2"
         >
           <span>Star GitHub</span>
-          <svg class="w-4 h-4 text-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg
+            class="w-4 h-4 text-mute"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+            ></polygon></svg
+          >
         </a>
       </div>
     </section>
 
     <!-- Workspace Section (Todo Application Dashboard) -->
-    <section id="dashboard" class="relative max-w-[1400px] mx-auto px-6 py-12 z-10 scroll-mt-20">
+    <section
+      id="dashboard"
+      class="relative max-w-[1400px] mx-auto px-6 py-12 z-10 scroll-mt-20"
+    >
       <div class="w-full flex flex-col items-center">
         <!-- Section label -->
-        <span class="font-mono text-xs text-mute tracking-[1.5px] uppercase mb-3">Workspace</span>
-        
+        <span
+          class="font-mono text-xs text-mute tracking-[1.5px] uppercase mb-3"
+          >Workspace</span
+        >
+
         <!-- Section Title (display-lg) -->
-        <h2 class="text-2xl md:text-3xl font-semibold tracking-[-1.28px] text-ink text-center mb-10 font-sans">
+        <h2
+          class="text-2xl md:text-3xl font-semibold tracking-[-1.28px] text-ink text-center mb-10 font-sans"
+        >
           Your tasks today.
         </h2>
 
@@ -105,38 +227,96 @@ import TodoApp from '../components/TodoApp.astro';
     </section>
 
     <!-- Features Showcase (3-up Grid) -->
-    <section id="features" class="relative max-w-[1400px] mx-auto px-6 py-16 border-t border-hairline mt-12 z-10">
+    <section
+      id="features"
+      class="relative max-w-[1400px] mx-auto px-6 py-16 border-t border-hairline mt-12 z-10"
+    >
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Feature 1 (card-marketing) -->
-        <div class="bg-canvas border border-hairline rounded-lg p-6 shadow-lvl-1 hover:shadow-lvl-2 transition-all">
-          <div class="w-8 h-8 rounded-md bg-canvas-soft border border-hairline flex items-center justify-center text-ink mb-4">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <div
+          class="bg-canvas border border-hairline rounded-lg p-6 shadow-lvl-1 hover:shadow-lvl-2 transition-all"
+        >
+          <div
+            class="w-8 h-8 rounded-md bg-canvas-soft border border-hairline flex items-center justify-center text-ink mb-4"
+          >
+            <svg
+              class="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path
+                d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"
+              ></path><polyline points="12 6 12 12 16 14"></polyline></svg
+            >
           </div>
-          <h3 class="text-base font-semibold text-ink mb-2">Instant Persistence</h3>
+          <h3 class="text-base font-semibold text-ink mb-2">
+            Instant Persistence
+          </h3>
           <p class="text-sm text-body leading-relaxed">
-            LocalStorage binding guarantees task safety. Refreshing or switching windows retains list state automatically.
+            LocalStorage binding guarantees task safety. Refreshing or switching
+            windows retains list state automatically.
           </p>
         </div>
 
         <!-- Feature 2 (card-marketing) -->
-        <div class="bg-canvas border border-hairline rounded-lg p-6 shadow-lvl-1 hover:shadow-lvl-2 transition-all">
-          <div class="w-8 h-8 rounded-md bg-canvas-soft border border-hairline flex items-center justify-center text-ink mb-4">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"></path></svg>
+        <div
+          class="bg-canvas border border-hairline rounded-lg p-6 shadow-lvl-1 hover:shadow-lvl-2 transition-all"
+        >
+          <div
+            class="w-8 h-8 rounded-md bg-canvas-soft border border-hairline flex items-center justify-center text-ink mb-4"
+          >
+            <svg
+              class="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path
+                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+              ></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"
+              ></path></svg
+            >
           </div>
-          <h3 class="text-base font-semibold text-ink mb-2">Double-Click Edit</h3>
+          <h3 class="text-base font-semibold text-ink mb-2">
+            Double-Click Edit
+          </h3>
           <p class="text-sm text-body leading-relaxed">
-            No need to navigate deep menus. Double-click any task title to transition instantly into text editing mode.
+            No need to navigate deep menus. Double-click any task title to
+            transition instantly into text editing mode.
           </p>
         </div>
 
         <!-- Feature 3 (card-marketing) -->
-        <div class="bg-canvas border border-hairline rounded-lg p-6 shadow-lvl-1 hover:shadow-lvl-2 transition-all">
-          <div class="w-8 h-8 rounded-md bg-canvas-soft border border-hairline flex items-center justify-center text-ink mb-4">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+        <div
+          class="bg-canvas border border-hairline rounded-lg p-6 shadow-lvl-1 hover:shadow-lvl-2 transition-all"
+        >
+          <div
+            class="w-8 h-8 rounded-md bg-canvas-soft border border-hairline flex items-center justify-center text-ink mb-4"
+          >
+            <svg
+              class="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline
+                points="2 17 12 22 22 17"></polyline><polyline
+                points="2 12 12 17 22 12"></polyline></svg
+            >
           </div>
-          <h3 class="text-base font-semibold text-ink mb-2">Sleek Design Tokens</h3>
+          <h3 class="text-base font-semibold text-ink mb-2">
+            Sleek Design Tokens
+          </h3>
           <p class="text-sm text-body leading-relaxed">
-            Every pixel adheres to layout ratios, shadows, and subtle micro-borders defined by Vercel engineering sheets.
+            Every pixel adheres to layout ratios, shadows, and subtle
+            micro-borders defined by Vercel engineering sheets.
           </p>
         </div>
       </div>
@@ -144,10 +324,22 @@ import TodoApp from '../components/TodoApp.astro';
   </main>
 
   <!-- Stark Footer -->
-  <footer class="w-full bg-canvas border-t border-hairline py-12 mt-auto z-10 relative">
-    <div class="max-w-[1400px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-mute font-sans">
+  <footer
+    class="w-full bg-canvas border-t border-hairline py-12 mt-auto z-10 relative"
+  >
+    <div
+      class="max-w-[1400px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-mute font-sans"
+    >
       <div class="flex items-center gap-2">
-        <svg class="w-4 h-4 text-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg
+          class="w-4 h-4 text-mute"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
           <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
@@ -161,3 +353,30 @@ import TodoApp from '../components/TodoApp.astro';
     </div>
   </footer>
 </Layout>
+
+<script>
+  const toggleBtn = document.getElementById("theme-toggle");
+  const sunIcon = document.getElementById("theme-sun");
+  const moonIcon = document.getElementById("theme-moon");
+
+  function updateToggleIcons() {
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      sunIcon?.classList.remove("hidden");
+      moonIcon?.classList.add("hidden");
+    } else {
+      sunIcon?.classList.add("hidden");
+      moonIcon?.classList.remove("hidden");
+    }
+  }
+
+  toggleBtn?.addEventListener("click", () => {
+    const isDark = document.documentElement.classList.toggle("dark");
+    localStorage.setItem("taskflow_theme", isDark ? "dark" : "light");
+    updateToggleIcons();
+    window.dispatchEvent(new Event("theme-change"));
+  });
+
+  // Initial check
+  updateToggleIcons();
+</script>
