@@ -1,4 +1,4 @@
-# Astro Starter Kit: Basics
+# Todoapp
 
 ```sh
 npm create astro@latest -- --template basics

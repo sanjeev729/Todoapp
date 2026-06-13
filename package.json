@@ -1,5 +1,5 @@
 {
-  "name": "testweb",
+  "name": "todoapp",
   "type": "module",
   "version": "0.0.1",
   "engines": {
@@ -13,5 +13,8 @@
   },
   "dependencies": {
     "astro": "^6.4.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.1"
   }
 }
